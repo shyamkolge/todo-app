@@ -1,26 +1,26 @@
-const {Schema , model} = require('mongoose');
+const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
+const todoSchema = new Schema({
 
-const todoSchema = new Schema(
-{
-     title : {
-        type : String , 
-        require : true,
-     },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "user", require: true },
 
-     body : {
-        type : String , 
-        require : true,
-     },
+  title: {
+    type: String,
+    require: true,
+  },
 
-     isChecked : {
-        type : String,
-        default : false
-     }
-     
+  body: {
+    type: String,
+    require: true,
+  },
 
-})
+  isChecked: {
+    type: Boolean,
+    default: false,
+  },
+},{timestamps : true});
 
-const todoModel = model("todoModel" , todoSchema);
+const todoModel = model("todoModel", todoSchema);
 
 module.exports = todoModel;
