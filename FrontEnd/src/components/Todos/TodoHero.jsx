@@ -2,7 +2,7 @@ import React from "react";
 
 const TodoHero = ({ all_todos, completed_todos }) => {
   return (
-    <section className="w-full flex justify-center bg-red-300 ">
+    <section className="w-full flex justify-center bg-red-300 mt-5">
 
       <div className="w-1/4 p-5 flex border border-white justify-between items-center">
       <div>

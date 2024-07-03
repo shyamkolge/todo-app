@@ -8,7 +8,7 @@ const TodoList = ({ todo }) => {
         <input
           type="checkbox"
           className="px-2 cursor-pointer"
-          checked={todo.is_completed}
+          defaultChecked={todo.is_completed}
         />
 
         <input
