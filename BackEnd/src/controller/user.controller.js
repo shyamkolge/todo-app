@@ -1,7 +1,6 @@
 const userModel = require("../models/user-model.js");
 const { asyncHandler, APIError, APIResponce } = require("../utils/index.js");
 
-
 const generateTokens = async (userId) => {
   try {
     const user = await userModel.findById(userId);
@@ -19,70 +18,71 @@ const generateTokens = async (userId) => {
   }
 };
 
-
 const signUp = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-    if ([name, email, password].some((field) => field?.trim() === "")) {
-      throw new APIError(400, "All fields are required");
-    }
+  if ([name, email, password].some((field) => field?.trim() === "")) {
+    throw new APIError(400, "All fields are required");
+  }
 
-    const userExists = await userModel.findOne({ email });
-    
+  const userExists = await userModel.findOne({ email });
 
-    if (userExists) {
-      throw new APIError(409, "User already Exits");
-    }
+  if (userExists) {
+    throw new APIError(409, "User already Exits");
+  }
 
-    const user = await userModel.create({
-      name,
-      email,
-      password,
-    });
+  const user = await userModel.create({
+    name,
+    email,
+    password,
+  });
 
-    const userCreated = await userModel.findById(user._id).select("-password -refreshToken");
+  const userCreated = await userModel
+    .findById(user._id)
+    .select("-password -refreshToken");
 
-    if (!userCreated) {
-      throw new APIError(500, "Something went wrong while creating User..!");
-    }
+  if (!userCreated) {
+    throw new APIError(500, "Something went wrong while creating User..!");
+  }
 
-    res.json(new APIResponce(200, userCreated, "User register successfully"));
- 
+  res.json(new APIResponce(200, userCreated, "User register successfully"));
+  
 });
 
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  
-    if ([ email, password ].some((field) => field?.trim() === "")) {
-      throw new APIError(400, "All fields are required");
-    }
 
-    const isUserExistes = await userModel.findOne({email})
+  if ([email, password].some((field) => field?.trim() === "")) {
+    throw new APIError(400, "All fields are required");
+  }
 
-    if (!isUserExistes) {
-      throw new APIError(401, "No user found..!");
-    }
+  const isUserExistes = await userModel.findOne({ email });
 
-    const isPasswordCorrect = await isUserExistes.isPasswordCorrect(password)
+  if (!isUserExistes) {
+    throw new APIError(401, "No user found..!");
+  }
 
-    if (!isPasswordCorrect) {
-      throw new APIError(401, "Invalid Password..!");
-    }
+  const isPasswordCorrect = await isUserExistes.isPasswordCorrect(password);
 
+  if (!isPasswordCorrect) {
+    throw new APIError(402, "Invalid Password..!");
+  }
 
-    const { accessToken , refreshToken } = await generateTokens(isUserExistes._id);
+  const { accessToken, refreshToken } = await generateTokens(isUserExistes._id);
 
-    const loginedUser =  await userModel.findById(isUserExistes._id).select("-password -refreshToken");
+  const loginedUser = await userModel
+    .findById(isUserExistes._id)
+    .select("-password -refreshToken");
 
-    const options = {
-      httpOnly : true,
-      secure : true
-    }
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
 
-    res.cookie('accessToken' , accessToken).cookie('refreshToken' , refreshToken).json(
-      new APIResponce(200, loginedUser, "User register successfully")
-    )
-
+  res
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(new APIResponce(200, {user : loginedUser , accessToken : accessToken }, "User register successfully"));
 });
 
-module.exports = { signUp , login};
+module.exports = { signUp, login };

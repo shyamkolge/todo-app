@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Login from "../Pages/Login";
+import { useAuth } from "../../context/AuthProvider";
 
 const Header = () => {
+    const { auth } = useAuth();
+    console.log(auth);
   return (
     <nav className="container">
       <div className="flex justify-between items-center">

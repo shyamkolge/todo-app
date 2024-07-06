@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./App.css";
 import { Header, TodoHero, TodoInput, TodoList } from "./components";
 
 function App() {
