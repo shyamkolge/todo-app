@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Login from "../Pages/Login";
-import { useAuth } from "../../context/AuthProvider";
+import useAuth from "../../hooks/useAuth";
+import User from "../User";
 
 const Header = () => {
     const { auth } = useAuth();
@@ -39,6 +40,8 @@ const Header = () => {
             Sign Up
           </button>
           </Link>
+
+          <User/>
         </div>
       </div>
     </nav>

@@ -2,7 +2,7 @@ import React from "react";
 import user from "/user.png";
 import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
+import useAuth  from "../../hooks/useAuth";
 import axios from "../../axios/axios";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
